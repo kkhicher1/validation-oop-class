@@ -8,12 +8,17 @@
 3. int
 4. max:value
 5. min:value
+6. digits:value
+7. email
+8. size:value
+9. ip
+10. url
+11. same:value
 
 */
 require 'Validator.php';
 $rules = array(
-    'name' => 'required|min:10',
-    'address' => 'required'
+    'name' => 'same:address'
 );
 if (isset($_POST['submit'])) {
     $validation = new Validator($_POST, $rules);

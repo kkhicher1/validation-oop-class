@@ -1,7 +1,7 @@
 <?php
 class Validator
 {
-    public $data;
+    private $data;
     private $errors = [];
     public function __construct($data = array(), $rules = array())
     {
@@ -20,28 +20,28 @@ class Validator
         }
     }
     //checking required rule
-    public function required($field_key)
+    private function required($field_key)
     {
         if (empty($this->data[$field_key])) {
             $this->errors[$field_key][] = "{$field_key} is required";
         }
     }
     //checking string rule
-    public function string($field_key)
+    private function string($field_key)
     {
         if (is_numeric($this->data[$field_key]) == true) {
             $this->errors[$field_key][] = "{$field_key} Should be a String";
         }
     }
     //checing numeric rule
-    public function int($field_key)
+    private function int($field_key)
     {
         if (is_numeric($this->data[$field_key]) == false) {
             $this->errors[$field_key][] = "{$field_key} Should be a number";
         }
     }
     //cheking max rule
-    public function max($field_key, $max_length)
+    private function max($field_key, $max_length)
     {
         if (isset($this->data[$field_key])) {
             if (strlen($this->data[$field_key]) > $max_length) {
@@ -50,7 +50,7 @@ class Validator
         }
     }
     //checking min rule
-    public function min($field_key, $min_length)
+    private function min($field_key, $min_length)
     {
         if (isset($this->data[$field_key])) {
             if (strlen($this->data[$field_key]) < $min_length) {
@@ -58,7 +58,64 @@ class Validator
             }
         }
     }
-
+    //checking digit length ...... digits:value
+    private function digits($field_key, $length)
+    {
+        if (is_numeric($this->data[$field_key]) == true) {
+            if (strlen($this->data[$field_key]) != $length) {
+                $this->errors[$field_key][] = "{$field_key} Should be equal to $length";
+            }
+        } else {
+            $this->errors[$field_key][] = "{$field_key} should be a number if you are using digits rule";
+        }
+    }
+    // checking email.....
+    private function email($field_key)
+    {
+        if (filter_var($this->data[$field_key], FILTER_VALIDATE_EMAIL) == false) {
+            $this->errors[$field_key][] = "{$field_key} should be a email";
+        }
+    }
+    //checking size .............. size:value
+    private function size($field_key, $value)
+    {
+        if (is_numeric($this->data[$field_key]) == true) {
+            if (strlen($this->data[$field_key]) != $value) {
+                $this->errors[$field_key][] = "{$field_key} Should be equal to $value";
+            }
+        }
+        if (is_string($this->data[$field_key]) == true) {
+            if (strlen($this->data[$field_key]) != $value) {
+                $this->errors[$field_key][] = "{$field_key} Should be equal to $value";
+            }
+        }
+        if (is_array($this->data[$field_key]) == true) {
+            if (count($this->data[$field_key]) != $value) {
+                $this->errors[$field_key][] = "{$field_key} Should be equal to $value";
+            }
+        }
+    }
+    //checking ip ............. check both ipv4 and ipv6
+    private function ip($field_key)
+    {
+        if (filter_var($this->data[$field_key], FILTER_VALIDATE_IP) == false) {
+            $this->errors[$field_key][] = "{$field_key} Should be valid IP";
+        }
+    }
+    //checking URL ............. e.g http://example.com or https://example.com
+    private function url($field_key)
+    {
+        if (filter_var($this->data[$field_key], FILTER_VALIDATE_URL) == false) {
+            $this->errors[$field_key][] = "{$field_key} Should be valid URL";
+        }
+    }
+    //checking same field ............... same:value
+    private function same($field_key, $same_field)
+    {
+        if ($this->data[$field_key] != $this->data[$same_field]) {
+            $this->errors[$field_key][] = "{$field_key} & {$same_field} Should be Same";
+        }
+    }
 
 
 
