@@ -13,4 +13,5 @@ simple validation system for your project
 8. size:value
 9. ip
 10. url
-11. same:value
+11. same:field
+
